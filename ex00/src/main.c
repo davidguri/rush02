@@ -6,7 +6,7 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 10:00:00 by student           #+#    #+#             */
-/*   Updated: 2025/09/21 10:28:13 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 17:39:08 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ static int validate_number_str(const char *str)
   return (str[i] == '\0');
 }
 
-static int convert_and_print(unsigned long long num, t_dict *dict)
+static int convert_and_print_str(const char *num_str, t_dict *dict)
 {
   char *words;
 
-  words = convert_to_words(num, dict);
+  words = convert_to_words_str(num_str, dict);
   if (!words)
   {
     ft_putstr("Dict Error\n");
@@ -53,16 +53,8 @@ static int convert_and_print(unsigned long long num, t_dict *dict)
 static int process_number(char *num_str, char *dict_path)
 {
   t_dict *dict;
-  unsigned long long num;
-  int error;
 
   if (!validate_number_str(num_str))
-  {
-    ft_putstr("Error\n");
-    return (1);
-  }
-  num = parse_ull(num_str, &error);
-  if (error)
   {
     ft_putstr("Error\n");
     return (1);
@@ -73,15 +65,19 @@ static int process_number(char *num_str, char *dict_path)
     ft_putstr("Dict Error\n");
     return (1);
   }
-  return (convert_and_print(num, dict));
+  return (convert_and_print_str(num_str, dict));
 }
 
 int main(int argc, char **argv)
 {
   if (argc == 2)
+  {
     return (process_number(argv[1], "numbers.dict"));
+  }
   else if (argc == 3)
+  {
     return (process_number(argv[2], argv[1]));
+  }
   else
   {
     ft_putstr("Error\n");

@@ -6,7 +6,7 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 10:00:00 by student           #+#    #+#             */
-/*   Updated: 2025/09/21 10:33:29 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 17:39:18 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,30 @@ char *dict_get(t_dict *dict, unsigned long long key)
   i = 0;
   while (i < dict->count)
   {
-    if (dict->entries[i].key == key)
+    if (dict->entries[i].has_ull && dict->entries[i].key == key)
       return (dict->entries[i].value);
+    i++;
+  }
+  return (NULL);
+}
+
+char *dict_get_str(t_dict *dict, const char *key_str)
+{
+  size_t i;
+
+  i = 0;
+  while (i < dict->count)
+  {
+    if (dict->entries[i].key_str && key_str)
+    {
+      const char *a = dict->entries[i].key_str;
+      const char *b = key_str;
+      size_t j = 0;
+      while (a[j] && b[j] && a[j] == b[j])
+        j++;
+      if (a[j] == '\0' && b[j] == '\0')
+        return (dict->entries[i].value);
+    }
     i++;
   }
   return (NULL);
@@ -85,6 +107,7 @@ void free_dict(t_dict *dict)
   while (i < dict->count)
   {
     free(dict->entries[i].value);
+    free(dict->entries[i].key_str);
     i++;
   }
   free(dict->entries);
