@@ -6,13 +6,71 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 17:40:00 by davidguri         #+#    #+#             */
-/*   Updated: 2025/09/21 19:22:59 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 20:36:57 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/utils.h"
 #include "../include/words.h"
 #include <stdlib.h>
+
+static int	calc_number_params(const char *p, int *len_digits, int *max_groups)
+{
+	*len_digits = 0;
+	while (p[*len_digits] >= '0' && p[*len_digits] <= '9')
+		(*len_digits)++;
+	if (*len_digits <= 0)
+		return (0);
+	*max_groups = (*len_digits + 2) / 3;
+	return (1);
+}
+
+static int	allocate_groups(int **groups, int max_groups)
+{
+	*groups = (int *)malloc(sizeof(int) * (size_t)max_groups);
+	return (*groups != NULL);
+}
+
+static int	init_convert_state(t_convert_state *st)
+{
+	st->result = (char **)malloc(sizeof(char *));
+	if (!st->result)
+		return (0);
+	*st->result = init_result();
+	if (!*st->result)
+	{
+		free(st->result);
+		return (0);
+	}
+	st->first = (int *)malloc(sizeof(int));
+	if (!st->first)
+	{
+		free(*st->result);
+		free(st->result);
+		return (0);
+	}
+	*st->first = 1;
+	return (1);
+}
+
+int	init_conversion(const char *p, int **groups, int *n, t_convert_state *st)
+{
+	int	len_digits;
+	int	max_groups;
+
+	if (!calc_number_params(p, &len_digits, &max_groups))
+		return (0);
+	if (!allocate_groups(groups, max_groups))
+		return (0);
+	if (!init_convert_state(st))
+	{
+		free(*groups);
+		return (0);
+	}
+	if (n)
+		*n = 0;
+	return (1);
+}
 
 static int	read_group_val(const char *s, int start, int end)
 {
@@ -53,44 +111,24 @@ int	split_groups(const char *s, int *groups, int *count)
 	return (1);
 }
 
-static int	convert_group(unsigned long long n, unsigned long long scale,
-		t_dict *dict, t_convert_state *state)
+int	assemble_from_groups(int *groups, int n, t_dict *dict, t_convert_state *st)
 {
-	unsigned long long	group;
+	int	i;
 
-	if (n >= scale)
+	i = n - 1;
+	while (i >= 0)
 	{
-		group = n / scale;
-		if (!convert_hundreds(group, dict, state))
-			return (0);
-		if (!append_word(state->result, dict_get(dict, scale), state->first))
-			return (0);
+		if (groups[i] > 0)
+		{
+			if (!convert_hundreds((unsigned long long)groups[i], dict, st))
+				return (0);
+			if (i > 0)
+			{
+				if (!append_scale_word(i, dict, st))
+					return (0);
+			}
+		}
+		i--;
 	}
 	return (1);
-}
-
-char	*process_scales(unsigned long long num, t_dict *dict,
-		t_convert_state *state)
-{
-	unsigned long long	scales[6];
-	int					i;
-
-	init_scales(scales);
-	i = 0;
-	while (i < 6)
-	{
-		if (!convert_group(num, scales[i], dict, state))
-		{
-			free(*state->result);
-			return (NULL);
-		}
-		num %= scales[i];
-		i++;
-	}
-	if (!convert_hundreds(num, dict, state))
-	{
-		free(*state->result);
-		return (NULL);
-	}
-	return (*state->result);
 }

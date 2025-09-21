@@ -6,7 +6,7 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 17:40:00 by davidguri         #+#    #+#             */
-/*   Updated: 2025/09/21 19:27:05 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 20:33:47 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,29 @@ char	*build_scale_key_string(int idx)
 	}
 	s[1 + total_zeroes] = '\0';
 	return (s);
+}
+
+int	append_scale_word(int i, t_dict *dict, t_convert_state *st)
+{
+	unsigned long long	scale_value;
+	char				*word;
+	char				*key;
+
+	word = NULL;
+	if (i >= 1 && i <= 6)
+	{
+		scale_value = get_scale_value(i);
+		word = dict_get(dict, scale_value);
+	}
+	else if (i > 6)
+	{
+		key = build_scale_key_string(i);
+		if (!key)
+			return (0);
+		word = dict_get_str(dict, key);
+		free(key);
+	}
+	if (!word)
+		return (0);
+	return (append_word(st->result, word, st->first));
 }
