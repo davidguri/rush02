@@ -6,7 +6,7 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 17:40:00 by davidguri         #+#    #+#             */
-/*   Updated: 2025/09/21 20:36:57 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 20:39:12 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,28 +107,6 @@ int	split_groups(const char *s, int *groups, int *count)
 		groups[*count] = read_group_val(s, i - g, i - 1);
 		(*count)++;
 		i -= g;
-	}
-	return (1);
-}
-
-int	assemble_from_groups(int *groups, int n, t_dict *dict, t_convert_state *st)
-{
-	int	i;
-
-	i = n - 1;
-	while (i >= 0)
-	{
-		if (groups[i] > 0)
-		{
-			if (!convert_hundreds((unsigned long long)groups[i], dict, st))
-				return (0);
-			if (i > 0)
-			{
-				if (!append_scale_word(i, dict, st))
-					return (0);
-			}
-		}
-		i--;
 	}
 	return (1);
 }
