@@ -6,12 +6,12 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 17:40:00 by davidguri         #+#    #+#             */
-/*   Updated: 2025/09/21 19:02:42 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 19:27:05 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
-#include "words.h"
+#include "../include/utils.h"
+#include "../include/words.h"
 #include <stdlib.h>
 
 char	*init_result(void)

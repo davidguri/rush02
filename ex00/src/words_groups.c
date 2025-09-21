@@ -6,12 +6,12 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 17:40:00 by davidguri         #+#    #+#             */
-/*   Updated: 2025/09/21 19:03:14 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 19:22:59 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
-#include "words.h"
+#include "../include/utils.h"
+#include "../include/words.h"
 #include <stdlib.h>
 
 static int	read_group_val(const char *s, int start, int end)
@@ -42,7 +42,10 @@ int	split_groups(const char *s, int *groups, int *count)
 	i = len;
 	while (i > 0)
 	{
-		g = (i >= 3) ? 3 : i;
+		if (i >= 3)
+			g = 3;
+		else
+			g = i;
 		groups[*count] = read_group_val(s, i - g, i - 1);
 		(*count)++;
 		i -= g;

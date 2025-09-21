@@ -6,13 +6,13 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 10:00:00 by student           #+#    #+#             */
-/*   Updated: 2025/09/21 19:01:57 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 19:27:05 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "dict.h"
-#include "utils.h"
-#include "words.h"
+#include "../include/dict.h"
+#include "../include/utils.h"
+#include "../include/words.h"
 
 static int	validate_number_str(const char *str)
 {

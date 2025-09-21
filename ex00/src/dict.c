@@ -6,12 +6,12 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 10:00:00 by student           #+#    #+#             */
-/*   Updated: 2025/09/21 19:01:41 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 19:41:36 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "dict.h"
-#include "utils.h"
+#include "../include/dict.h"
+#include "../include/utils.h"
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -32,10 +32,6 @@ static t_dict	*init_dict(void)
 	dict->capacity = 128;
 	return (dict);
 }
-
-/* add_entry implemented in dict_read.c alongside parse_line */
-
-/* parse_line moved to dict_read.c to keep function count reasonable */
 
 t_dict	*load_dict(const char *path)
 {
@@ -78,11 +74,12 @@ char	*dict_get(t_dict *dict, unsigned long long key)
 char	*dict_get_str(t_dict *dict, const char *key_str)
 {
 	size_t		i;
-	const char	*a = dict->entries[i].key_str;
+	const char	*a;
 	const char	*b = key_str;
 	size_t		j;
 
 	i = 0;
+	a = dict->entries[i].key_str;
 	while (i < dict->count)
 	{
 		if (dict->entries[i].key_str && key_str)

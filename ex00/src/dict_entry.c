@@ -1,34 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dict_read.c                                        :+:      :+:    :+:   */
+/*   dict_entry.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/21 10:00:00 by student           #+#    #+#             */
+/*   Created: 2025/09/21 19:30:00 by davidguri         #+#    #+#             */
 /*   Updated: 2025/09/21 19:32:58 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/dict.h"
 #include "../include/utils.h"
-#include <fcntl.h>
-#include <unistd.h>
+#include <stdlib.h>
 
-int	read_dict_file(int fd, t_dict *dict)
+static int	resize_dict(t_dict *dict)
 {
-	char		buffer[4096];
-	char		line[4096];
-	t_read_ctx	ctx;
-	int			bytes;
+	t_entry	*new_entries;
 
-	ctx.line = line;
-	ctx.j = 0;
-	ctx.dict = dict;
-	bytes = read_chunk(fd, buffer, &ctx);
-	while (bytes > 0)
-		bytes = read_chunk(fd, buffer, &ctx);
-	if (bytes >= 0)
-		return (process_remaining(&ctx));
-	return (0);
+	new_entries = malloc(sizeof(t_entry) * dict->capacity * 2);
+	if (!new_entries)
+		return (0);
+	while (dict->count > 0)
+	{
+		dict->count--;
+		new_entries[dict->count] = dict->entries[dict->count];
+	}
+	free(dict->entries);
+	dict->entries = new_entries;
+	dict->capacity *= 2;
+	dict->count = dict->capacity / 2;
+	return (1);
+}
+
+int	add_entry(t_dict *dict, t_entry *new_entry)
+{
+	if (dict->count >= dict->capacity)
+	{
+		if (!resize_dict(dict))
+			return (0);
+	}
+	dict->entries[dict->count] = *new_entry;
+	dict->count++;
+	return (1);
 }

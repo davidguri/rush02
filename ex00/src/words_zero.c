@@ -1,39 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   words_hundreds.c                                   :+:      :+:    :+:   */
+/*   words_zero.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/21 17:40:00 by davidguri         #+#    #+#             */
+/*   Created: 2025/09/21 19:20:00 by davidguri         #+#    #+#             */
 /*   Updated: 2025/09/21 19:27:05 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/utils.h"
 #include "../include/words.h"
+#include <stdlib.h>
 
-int	convert_hundreds(unsigned long long n, t_dict *dict, t_convert_state *state)
+char	*handle_zero_case(const char *p, t_dict *dict)
 {
-	if (n >= 100)
+	if (!*p)
+		return (ft_strdup(dict_get(dict, 0)));
+	return (NULL);
+}
+
+char	*handle_zero_number(t_dict *dict)
+{
+	char	*result;
+	int		first;
+
+	result = init_result();
+	if (!result)
+		return (NULL);
+	first = 1;
+	if (!append_word(&result, dict_get(dict, 0), &first))
 	{
-		if (!append_word(state->result, dict_get(dict, n / 100), state->first))
-			return (0);
-		if (!append_word(state->result, dict_get(dict, 100), state->first))
-			return (0);
-		n %= 100;
+		free(result);
+		return (NULL);
 	}
-	if (n >= 20)
-	{
-		if (!append_word(state->result, dict_get(dict, (n / 10) * 10),
-				state->first))
-			return (0);
-		n %= 10;
-	}
-	if (n > 0)
-	{
-		if (!append_word(state->result, dict_get(dict, n), state->first))
-			return (0);
-	}
-	return (1);
+	return (result);
 }

@@ -1,11 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   words_hundreds.c                                   :+:      :+:    :+:   */
+/*   words_prefix.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/21 17:40:00 by davidguri         #+#    #+#             */
+/*   Created: 2025/09/21 19:20:00 by davidguri         #+#    #+#             */
 /*   Updated: 2025/09/21 19:27:05 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -13,27 +13,17 @@
 #include "../include/utils.h"
 #include "../include/words.h"
 
-int	convert_hundreds(unsigned long long n, t_dict *dict, t_convert_state *state)
+const char	*skip_prefix_zeros(const char *s)
 {
-	if (n >= 100)
-	{
-		if (!append_word(state->result, dict_get(dict, n / 100), state->first))
-			return (0);
-		if (!append_word(state->result, dict_get(dict, 100), state->first))
-			return (0);
-		n %= 100;
-	}
-	if (n >= 20)
-	{
-		if (!append_word(state->result, dict_get(dict, (n / 10) * 10),
-				state->first))
-			return (0);
-		n %= 10;
-	}
-	if (n > 0)
-	{
-		if (!append_word(state->result, dict_get(dict, n), state->first))
-			return (0);
-	}
-	return (1);
+	const char	*p;
+
+	p = s;
+	while (*p && (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r'
+			|| *p == '\v' || *p == '\f'))
+		p++;
+	if (*p == '+')
+		p++;
+	while (*p == '0')
+		p++;
+	return (p);
 }

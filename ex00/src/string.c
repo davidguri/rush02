@@ -6,11 +6,11 @@
 /*   By: davidguri <davidguri@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 10:00:00 by student           #+#    #+#             */
-/*   Updated: 2025/09/21 19:02:29 by davidguri        ###   ########.fr       */
+/*   Updated: 2025/09/21 19:27:05 by davidguri        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "../include/utils.h"
 #include <stdlib.h>
 
 int	is_printable(char c)
